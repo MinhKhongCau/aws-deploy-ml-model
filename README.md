@@ -5,7 +5,7 @@ BÁO CÁO: IOT - LAB 3
 Đây là tài liệu tóm tắt về kiến trúc và quy trình triển khai (deployment) một mô hình Machine Learning (phát hiện khẩu trang) thành một dịch vụ API có khả năng mở rộng, ổn định sử dụng các công nghệ hiện đại.
 
 Tác giả: Ngô Quang Minh (N22DCCN053) & Nguyễn Khắc Tùng Dương (N22DCCN018)
-1. 💡 Kiến Trúc Tổng Quan
+## 1. 💡 Kiến Trúc Tổng Quan
 
 Kiến trúc này tận dụng tính "serverless" của AWS Fargate để chạy các ứng dụng được đóng gói bằng Docker, giúp đơn giản hóa việc vận hành và quản lý cơ sở hạ tầng.
 Công nghệ	Vai trò Chính
@@ -13,10 +13,10 @@ Docker	Đóng gói ứng dụng Flask/Python và mô hình ML vào một Contain
 Amazon ECR	Kho lưu trữ riêng tư cho Docker Image, đảm bảo an toàn và tích hợp chặt chẽ với AWS.
 Amazon ECS (Fargate)	Dịch vụ điều phối Container (Container Orchestration) ở chế độ Serverless, tự động khởi chạy và duy trì các tác vụ (Tasks) từ Image ECR.
 Client	Truy cập dịch vụ thông qua Public IP hoặc Load Balancer.
-2. ⚙️ Quy Trình Triển Khai Chi Tiết
+## 2. ⚙️ Quy Trình Triển Khai Chi Tiết
 
 Quy trình được chia thành các giai đoạn chính: Đóng gói, Lưu trữ và Vận hành.
-2.1. Bước 1: Docker hóa Ứng dụng ML
+### 2.1. Bước 1: Docker hóa Ứng dụng ML
 
 Ứng dụng Python (sử dụng Flask/Gunicorn) và các mô hình ML (như resnet50_feature_extractor.h5, yolov8n-face.pt) được đóng gói để tạo thành môi trường thực thi độc lập.
 
@@ -32,7 +32,7 @@ Lưu ý quan trọng: Báo cáo khuyến nghị sử dụng máy chủ WSGI (nh�
     |-- requirements.txt
     |-- server.py (Máy chủ API Flask/Gunicorn)
 
-2.2. Bước 2: Đẩy Image lên Amazon ECR
+### 2.2. Bước 2: Đẩy Image lên Amazon ECR
 ![alt textimages/](image.png)
 ![alt text](images/image-1.png)
 Image Docker được xây dựng trên máy cục bộ, gắn thẻ (tag) theo định dạng ECR và sau đó được đẩy (push) lên Repository đã tạo.
@@ -50,7 +50,7 @@ Image Docker được xây dựng trên máy cục bộ, gắn thẻ (tag) theo 
         docker push ... (Đẩy lên ECR)
 
 
-2.3. Bước 3: Vận hành Dịch vụ trên Amazon ECS (Fargate)
+### 2.3. Bước 3: Vận hành Dịch vụ trên Amazon ECS (Fargate)
 
 Các bước cấu hình ECS để sử dụng Image từ ECR và khởi chạy dịch vụ:
 
@@ -76,7 +76,7 @@ Các bước cấu hình ECS để sử dụng Image từ ECR và khởi chạy 
 ![alt text](images/image-2.png)
 ![alt text](images/image-3.png)
 ![alt text](images/image-4.png)
-3. 🛡️ Khắc Phục Sự Cố (Troubleshooting)
+## 3. 🛡️ Khắc Phục Sự Cố (Troubleshooting)
 
 Vấn đề phổ biến nhất là "Không thể truy cập URL" thường liên quan đến Network:
 
@@ -86,7 +86,7 @@ Vấn đề phổ biến nhất là "Không thể truy cập URL" thường liê
 
     Port Mapping: Đảm bảo Container port trong Task Definition khớp với cổng mà ứng dụng (Flask/Gunicorn) đang lắng nghe (mặc định là 5000).
 
-4. 🌐 DEMO Truy Cập Dịch Vụ
+## 4. 🌐 DEMO Truy Cập Dịch Vụ
 
 Dịch vụ đã được triển khai thành công và có thể được truy cập thông qua địa chỉ IP công cộng.
 
